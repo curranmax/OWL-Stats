@@ -13,6 +13,13 @@ class AllData:
 		self.players   = players
 		self.matches   = matches
 
+	def getPlayer(self, name):
+		for _, player in self.players.iteritems():
+			if player.name.lower() == name.lower():
+				return player
+
+		return None
+
 class Scale(enum.Enum):
 	ESSENTIAL = 1
 	FULL      = 2
@@ -346,9 +353,16 @@ class Match(object):
 	def addPendingData(self):
 		self.match_status = MatchStatus.PENDING
 
+	def getOtherTeam(self, team):
+		if team.id_num == self.team1.id_num:
+			return self.team2
+		if team.id_num == self.team2.id_num:
+			return self.team1
+		return None
+
 	def getEssentialString(self, separator, equal_symbol):
 		# TODO add scheduled_start
-		values = [('match_status', self.match_status), ('id_num', self.id_num), ('team1_id', self.team1.id_num), ('team2_id', self.team1.id_num),
+		values = [('match_status', self.match_status), ('id_num', self.id_num), ('team1_id', self.team1.id_num), ('team2_id', self.team2.id_num),
 					('stage_num', self.stage_num), ('week_num', self.week_num),
 					('map_stat_ids', listToString(self.map_stats.keys(), separator = ';', map_func = listToString))]
 
@@ -448,6 +462,7 @@ class MapStats(object):
 
 		return separator.join(map(lambda x: str(x[0]) + equal_symbol + str(x[1]), values))
 
+# TODO improve how this object can get data about the match it is from.
 class PlayerStats(object):
 	def __init__(self, player = None, player_id = None, map_stats = None, match_id = None, map_num = None, hero_stats = None):
 		if type(player) is Player and player_id is None:

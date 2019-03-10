@@ -465,6 +465,7 @@ def getDataFromFiles(
 			raise Exception('Missing team2: ' + str(match.team2))
 
 		match.team2 = data.teams[match.team2]
+
  
 		# Link this matches data to its children map_stats
 		for k in match.map_stats:
