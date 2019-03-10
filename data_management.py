@@ -455,6 +455,17 @@ def getDataFromFiles(
 				hero_stat = HeroStats(**values)
 				hero_stats[hero_stat.getID()] = hero_stat
 
+		# Link this match to its parent teams
+		if match.team1 not in data.teams:
+			raise Exception('Missing team1: ' + str(match.team1))
+
+		match.team1 = data.teams[match.team1]
+
+		if match.team2 not in data.teams:
+			raise Exception('Missing team2: ' + str(match.team2))
+
+		match.team2 = data.teams[match.team2]
+ 
 		# Link this matches data to its children map_stats
 		for k in match.map_stats:
 			if k not in map_stats:
